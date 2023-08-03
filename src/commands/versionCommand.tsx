@@ -3,13 +3,13 @@ import { sendReply } from "enmity/api/clyde";
 
 
 export const InformationCommand: Command = {
-    id: "version-command",
+    id: "calculator-command",
 
-    name: "version",
-    displayName: "version",
+    name: "calculator",
+    displayName: "calculator",
 
-    description: "shows the version number of your discord",
-    displayDescription: "shows the version number of your discord",
+    description: "a simple calculator",
+    displayDescription: "a simple calculator",
 
     type: ApplicationCommandType.Chat,
     inputType: ApplicationCommandInputType.BuiltInText,
