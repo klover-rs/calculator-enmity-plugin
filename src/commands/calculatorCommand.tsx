@@ -1,6 +1,10 @@
 import { ApplicationCommandInputType, ApplicationCommandOptionType, ApplicationCommandType, Command } from "enmity/api/commands";
 import { sendReply } from "enmity/api/clyde";
+import { filters, bulk } from 'enmity/metro';
+import { Toasts } from "enmity/metro/common";
+import { getIDByName } from 'enmity/api/assets'
 
+const [Clipboard] = bulk(filters.byProps('setString'));
 
 export const InformationCommand: Command = {
     id: "calculator-command",
@@ -44,15 +48,27 @@ export const InformationCommand: Command = {
 		type: ApplicationCommandOptionType.String,
 		required: true
 
-	}],
+	},
+    {
+        name: "clipboard",
+        displayName: "clipboard",
+
+        description: "copy the result to your clipboard",
+        displayDescription: "copy the result to your clipboard",
+
+        type: ApplicationCommandOptionType.Boolean,
+        required: false
+    }],
 
     execute: async function (args, message) {
 
         var value_1 = args.find(x => x.name == "value1")?.value;
         var value_2 = args.find(x => x.name == "value2")?.value;
-        let op = args.find(x => x.name == "operator")?.value;
+        var op = args.find(x => x.name == "operator")?.value;
+        var clipboard = args.find(x => x.name == "clipboard")?.value;
 
-        let color = "#498ef1"
+        let color = "#498ef1";
+        const pi = 3.14; 
 
         
         function convertToFloat(inputString) {
@@ -74,6 +90,14 @@ export const InformationCommand: Command = {
 
         var _value1 = convertToFloat(value_1);
         var _value2 = convertToFloat(value_2);
+
+        if (value_1.toLowerCase() === "pi") {
+            _value1 = pi;
+        }
+    
+        if (value_2.toLowerCase() === "pi") {
+            _value2 = pi;
+        }
 
         if (isNaN(_value1) || isNaN(_value2)) {
             return sendReply(message?.channel.id ?? "0", { content: "please enter a valid number"});
@@ -106,7 +130,15 @@ export const InformationCommand: Command = {
             
         }
 
+        
 
+        if (clipboard) {
+            Clipboard.setString(result.toString())
+            Toasts.open({
+                content: "copied result to clipboard!",
+                source: getIDByName("Check")
+            })
+        }
         //sendReply(message?.channel.id ?? "0", { embeds: [embed]});
         sendReply(message?.channel.id ?? "0", { embeds: [embed]});
     }
