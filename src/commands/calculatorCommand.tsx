@@ -67,7 +67,7 @@ export const InformationCommand: Command = {
         var op = args.find(x => x.name == "operator")?.value;
         var clipboard = args.find(x => x.name == "clipboard")?.value;
 
-        let color = "#498ef1";
+        let color = "0x1b80ff";
         const pi = 3.14; 
 
         
